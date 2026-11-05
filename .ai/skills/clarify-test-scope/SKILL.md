@@ -1,3 +1,8 @@
+---
+name: clarify-test-scope
+description: Clarifies requirements and turns an underspecified test request into a confirmed, implementable scope before any test code is written or modified.
+---
+
 # Clarify Test Scope
 
 ## Purpose
@@ -17,3 +22,4 @@ Run in the main conversation, before reading or editing any test code, whenever 
 
 3. Ask the user about every unspecified point in a single message, as one numbered list of concise questions. Do not guess missing details and do not start implementing.
 4. After the user answers, restate the confirmed scope as a short plan and implement only from that plan.
+

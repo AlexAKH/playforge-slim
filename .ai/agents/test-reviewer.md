@@ -1,3 +1,9 @@
+---
+name: test-reviewer
+description: Reviews test files independently in an isolated context against page-object and component conventions before declaring work done.
+tools: Read, Grep, Glob
+---
+
 # Test Reviewer
 
 ## Input
@@ -14,3 +20,4 @@ Review the test independently in an isolated context. Do not ask the user questi
 
 ## Output
 Return a table with `Status`, `Finding`, `Evidence` (file and line), and `Required action` — one row per checked point — followed by a one-line verdict: `approve` or `needs-work`.
+
