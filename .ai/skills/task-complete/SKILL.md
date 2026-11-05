@@ -1,16 +1,27 @@
+---
+name: task-complete
+description: Verifies all pipeline outputs and reports final closure for non-trivial routed work.
+---
+
 # Task Complete
 
 ## Purpose
-Close a pipeline run only when the result verifiably meets the original request.
+Close a pipeline or routed task run only when the result verifiably meets the original request.
 
 ## When to run
-Run as the final step of a pipeline, after every earlier step has produced its output.
+Run as the final closure step of any non-trivial routed work, after all required task steps have produced their output.
 
 ## Procedure
-1. Verify that this is running as the final step of the create-test pipeline. If no expected artifact chain (`Skill: clarify-test-scope`, `Skill: craft-test-cases`, `Skill: implement-test`, `Agent: test-reviewer`) is visible in the conversation, refuse closure and require manager routing.
+1. Identify the executed workflow:
+   - For `create-test`: verify the complete artifact chain (`Skill: clarify-test-scope`, `Skill: craft-test-cases`, `Skill: implement-test`, `Agent: test-reviewer`) is visible in the conversation.
+   - For instruction additions or capability evaluation: verify the evaluation report (`Agent: instruction-evaluator`) is visible with an approved verdict.
+   - For other routed workflows: verify that each step planned during routing produced its required output artifact.
+   If required artifacts are missing, refuse closure and hand back to the step that owns the missing artifact.
 2. Restate the original request in one sentence.
-3. Check: every planned output artifact from the pipeline is present in the conversation; every crafted case ID appears implemented in the reported spec file; the spec was executed and passed; the reviewer's verdict is `approve`; no checklist item from the confirmed scope is unaddressed.
-4. If any check fails, refuse closure, name the failing check, and hand back to the step that owns it.
+3. Check workflow-specific verification criteria:
+   - For test creation: verify every crafted case ID is covered in the implemented spec, the spec passed execution, and `test-reviewer` returned `approve`.
+   - For instruction changes: verify `instruction-evaluator` findings are resolved.
+4. If any check fails, refuse closure, name the failing check, and return to the step that owns it.
 5. If all checks pass, produce the closure table and declare the task complete.
 
 ## Output Contract

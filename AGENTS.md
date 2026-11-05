@@ -8,6 +8,7 @@ This repository contains a strict TypeScript and Playwright Component-DSL test a
 - `playwright.config.ts` defines test-runner behavior.
 - `docs/conventions/page-objects.md` defines page-object rules.
 - `docs/conventions/components.md` defines component rules.
+- `docs/conventions/test-standards.md` defines locator and wait conventions.
 - `.ai/conventions/skill-vs-agent.md` defines capability classification rules.
 - `.ai/docs/project_specification.md` defines the project profile and scope.
 - Existing files under `pages/`, `pages/components/`, and `tests/` demonstrate current code conventions.
@@ -28,11 +29,12 @@ Before creating, editing, or deleting any file:
 3. Every non-trivial routed task must execute `.ai/skills/task-complete/SKILL.md` as its final closure gate before completion is declared.
 
 ## Capability Routing
-- **Create or modify a test:**
-  1. - When the user asks to create a new test, follow the create-test pipeline at `instructions/pipelines/create-test.md`, starting from step 1.
-- When the user asks to modify an existing test, follow the `clarify-test-scope` skill at `<clarify-skill-path>` before reading or writing any code
-  2. Implement test code adhering to `docs/conventions/page-objects.md` and `docs/conventions/components.md`.
-  3. Run the test and observe results.
+- **Create a test:**
+  - Follow the create-test pipeline at `.ai/pipelines/create-test.md`, starting from step 1.
+- **Modify an existing test:**
+  1. Follow the `clarify-test-scope` skill at `.ai/skills/clarify-test-scope/SKILL.md` before reading or editing code.
+  2. Implement test code adhering to `docs/conventions/page-objects.md`, `docs/conventions/components.md`, and `docs/conventions/test-standards.md`.
+  3. Run the test with `npx playwright test <spec-path>` and observe results.
   4. Trigger `.ai/agents/test-reviewer.md` in an isolated context and report its verdict before declaring completion.
   5. Conclude with `.ai/skills/task-complete/SKILL.md`.
 - **Add or evaluate instruction capabilities:**
@@ -44,11 +46,18 @@ Before creating, editing, or deleting any file:
   - Before creating or updating a component, read `docs/conventions/components.md`.
 
 ## Capability Registry
+- **Pipelines:**
+  - `create-test`: `.ai/pipelines/create-test.md`
 - **Skills:**
   - `clarify-test-scope`: `.ai/skills/clarify-test-scope/SKILL.md`
+  - `craft-test-cases`: `.ai/skills/craft-test-cases/SKILL.md`
+  - `implement-test`: `.ai/skills/implement-test/SKILL.md`
   - `task-complete`: `.ai/skills/task-complete/SKILL.md`
 - **Agents:**
   - `test-reviewer`: `.ai/agents/test-reviewer.md`
   - `instruction-evaluator`: `.ai/agents/instruction-evaluator.md`
 - **Conventions:**
   - `skill-vs-agent`: `.ai/conventions/skill-vs-agent.md`
+  - `test-standards`: `docs/conventions/test-standards.md`
+  - `page-objects`: `docs/conventions/page-objects.md`
+  - `components`: `docs/conventions/components.md`

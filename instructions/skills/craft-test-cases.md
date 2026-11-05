@@ -1,4 +1,0 @@
-# Craft-Test-Cases Pipeline
-## Responsibility Turn one feature requirement into structured, technique-derived test cases and a coverage checklist, before any test code is written. This file orders the steps; each step's procedure lives in its own skill. Its saved output is the input to the create-test pipeline.
-## Sequence1. Parse requirement — follow `instructions/skills/parse-requirement.md`; do not continue until the parsed lists and open questions exist.2. Apply techniques — follow `instructions/skills/apply-test-techniques.md`; do not continue until the derived-scenarios table (with technique, pyramid level, and parameters) exists.3. Produce output — follow `instructions/skills/produce-test-cases.md`; the run ends when the deliverable is saved to `test-cases/<feature-slug>.md` and its path is reported.
-Never skip a step, reorder steps, or start a step before the previous step's output exists. This pipeline designs test cases only — it writes no test code.

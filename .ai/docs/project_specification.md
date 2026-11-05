@@ -16,15 +16,18 @@
 - **External Best-Practice Research:** Not allowed (rely strictly on local authoritative conventions).
 
 ## 4. Known Capability Triggers
-- **Create or modify a test:** Trigger `clarify-test-scope` (`instructions/agents/clarify-test-scope.md`) before reading or modifying code.
-- **After test creation/modification:** Trigger `test-reviewer` (`instructions/agents/test-reviewer.md`) and report verdict before declaring done.
+- **Create a test:** Trigger `create-test` pipeline (`.ai/pipelines/create-test.md`).
+- **Modify a test:** Trigger `clarify-test-scope` (`.ai/skills/clarify-test-scope/SKILL.md`) before reading or modifying code.
+- **After test creation/modification:** Trigger `test-reviewer` (`.ai/agents/test-reviewer.md`) and report verdict before declaring done.
+- **Add or evaluate instruction capabilities:** Evaluate using `.ai/agents/instruction-evaluator.md` before acceptance, and conclude with `.ai/skills/task-complete/SKILL.md`.
 - **Before creating/modifying a page object:** Read `docs/conventions/page-objects.md`.
 - **Before creating/modifying a component:** Read `docs/conventions/components.md`.
-- **Before adding a skill or agent:** Classify using `docs/conventions/skill-vs-agent.md`.
+- **Before adding a skill or agent:** Classify using `.ai/conventions/skill-vs-agent.md`.
 
 ## 5. Authoritative Local Sources
 - `AGENTS.md` (root contract, boundaries, routing).
-- `docs/conventions/` (`page-objects.md`, `components.md`, `skill-vs-agent.md`).
+- `docs/conventions/` (`page-objects.md`, `components.md`, `test-standards.md`).
+- `.ai/conventions/skill-vs-agent.md` (capability architecture rules).
 - `package.json` & `playwright.config.ts` (tooling, commands, test-runner config).
 - Existing codebase architecture (`pages/`, `pages/components/`, `tests/`, `framework/`, `assertions/`).
 
@@ -56,4 +59,3 @@
 
 ## 10. Open Profile Gaps
 - None. All required profile points confirmed.
-
