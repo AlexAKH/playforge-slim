@@ -29,7 +29,8 @@ Before creating, editing, or deleting any file:
 
 ## Capability Routing
 - **Create or modify a test:**
-  1. Trigger `.ai/skills/clarify-test-scope/SKILL.md` in the main conversation before reading or modifying any test code.
+  1. - When the user asks to create a new test, follow the create-test pipeline at `instructions/pipelines/create-test.md`, starting from step 1.
+- When the user asks to modify an existing test, follow the `clarify-test-scope` skill at `<clarify-skill-path>` before reading or writing any code
   2. Implement test code adhering to `docs/conventions/page-objects.md` and `docs/conventions/components.md`.
   3. Run the test and observe results.
   4. Trigger `.ai/agents/test-reviewer.md` in an isolated context and report its verdict before declaring completion.

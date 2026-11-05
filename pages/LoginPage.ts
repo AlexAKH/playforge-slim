@@ -14,9 +14,11 @@ export interface SignupIdentity {
 }
 
 export class LoginPage extends xPage {
+  readonly errorMessage = this.$("[data-qa='login-error'], .login-form p");
   readonly header = new SiteHeaderComponent(this.$("header"));
   readonly loginButton = this.$("[data-qa='login-button']");
   readonly loginEmail = this.$("[data-qa='login-email']");
+  readonly loginForm = this.$("[data-qa='login-form'], .login-form");
   readonly loginPassword = this.$("[data-qa='login-password']");
   readonly path = "/login";
   readonly signupButton = this.$("[data-qa='signup-button']");
