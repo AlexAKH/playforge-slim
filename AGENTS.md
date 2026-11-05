@@ -20,3 +20,8 @@ This fixture contains TypeScript and Playwright test code. Protect readable test
 - Do not expose secrets or commit generated credentials.
 - Do not place page objects, components, or specs outside their documented folders without human approval.
 - Do not report a test as passing without running it and observing the result.
+
+## Capability Routing
+- When the user asks to create or modify a test, follow the `clarify-test-scope` skill at `instructions/skills/clarify-test-scope.md` before reading or writing any code.
+- After a test file has been created or modified, run the `test-reviewer` agent at `instructions/agents/test-reviewer.md` and report its verdict before declaring the work done.
+- Before adding a new skill or agent, classify it with `docs/conventions/skill-vs-agent.md`.

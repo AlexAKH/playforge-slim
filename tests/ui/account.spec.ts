@@ -59,3 +59,18 @@ test("new user can create an account and sign in with it @ui", async ({ page }, 
   await accountDeletedPage.isOpened();
   await assertTextEquals(accountDeletedPage.message, "Account Deleted!");
 });
+
+test("user can log in with existing account @ui", async ({ page }) => {
+  const homePage = await new HomePage(page).open();
+  await homePage.header.openSignupLogin();
+
+  const loginPage = new LoginPage(page);
+  await loginPage.isOpened();
+  await loginPage.login({
+    email: "test_epam_course@test.com",
+    password: "test_course"
+  });
+
+  await homePage.isOpened();
+  await assertVisible(homePage.header.loggedInAs("test_epam_course"));
+});
