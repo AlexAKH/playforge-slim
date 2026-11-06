@@ -1,5 +1,5 @@
 import { assertTextEquals, assertVisible } from "../assertions";
-import { test } from "../framework/fixtures/app.fixture";
+import { expect, test } from "../framework/fixtures/app.fixture";
 import { HomePage } from "../pages/HomePage";
 import { LoginPage } from "../pages/LoginPage";
 
