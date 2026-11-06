@@ -4,5 +4,17 @@
   },
   "general": {
     "defaultApprovalMode": "auto_edit"
+  },
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--isolated",
+        "--browser",
+        "chrome"
+      ]
+    }
   }
 }
