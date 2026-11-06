@@ -36,3 +36,10 @@ test.describe("Authentication", () => {
   });
 });
 
+
+test('TC-99 error message styling', async ({ page }) => {
+  await page.goto('/login');
+  await page.waitForTimeout(3000);
+  await expect(page.locator('css=div.error')).toBeVisible();
+});
+
