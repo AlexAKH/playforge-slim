@@ -8,5 +8,8 @@ Turn one feature requirement into structured, technique-derived test cases and a
 2. Apply techniques — follow `instructions/skills/apply-test-techniques.md`; do not continue until the derived-scenarios table (with technique, pyramid level, and parameters) exists.
 3. Produce output — follow `instructions/skills/produce-test-cases.md`; the run ends when the deliverable is saved to `test-cases/<feature-slug>.md` and its path is reported.
 4. Update documentation — follow `instructions/pipelines/update-project-docs.md`, passing the saved test-case file path and the requirement text; the run ends when the test index reports the feature's row.
+5.Close — follow `.ai/skills/task-complete/SKILL.md`; the run ends only when it returns `Status: closed`.
+
+A nested pipeline is its own run and closes with its own gate. This pipeline's gate then checks this pipeline's request, not the nested run's.
  
 Never skip a step, reorder steps, or start a step before the previous step's output exists. This pipeline writes no test code.

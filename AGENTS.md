@@ -49,6 +49,10 @@ Before creating, editing, or deleting any file:
   - When a spec file under `tests/` is created or changed, follow the update-project-docs pipeline at `instructions/pipelines/update-project-docs.md` for the feature whose test-case file the changed spec implements, before reporting the task done. Skip this when the changed spec implements no crafted test-case file.
   - Before answering any question about what is tested, covered, or already specified, read `docs/test-index.md` first, then the feature doc that the index names.
 
+
+  - Never report a task as done, complete, or finished until `instructions/skills/task-complete.md` has returned the line `Status: closed` in this run. A run that ends without that line is unfinished, whatever its other steps reported.
+  - When task-complete returns `Status: refused`, hand the run back to the step it names, apply only the correction it states, and run the gate again. Do not report the refusal to the user as progress toward completion.
+
 ## Capability Registry
 - **Pipelines:**
   - `create-test`: `.ai/pipelines/create-test.md`
