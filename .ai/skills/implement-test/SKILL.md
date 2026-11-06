@@ -30,4 +30,29 @@ Run in the main conversation after `craft-test-cases` has produced its case tabl
 Emit the implementation report as a visible artifact:
 `Skill: implement-test - output below`
 
+## Locator confirmation (Playwright MCP)
+ 
+Before writing any locator into a spec file, confirm it against the live page:
+ 
+1. Navigate to the page the scope names, then take an accessibility snapshot.
+2. For every locator the scope supplies, check it two ways: find the element in the
+   snapshot, and run the exact selector against the live DOM with `browser_evaluate`
+   (`document.querySelectorAll('<selector>').length`). Report `confirmed` only when the
+   count is exactly `1` and name the matching snapshot element; otherwise report
+   `not found` with the count.
+3. If a scope locator is absent from the first snapshot and the scope describes an
+   interaction that would reveal it, perform that interaction, snapshot again, and
+   re-check before reporting `not found`.
+4. For a locator that is still `not found`, propose a replacement built from what a
+   snapshot actually contains, and name the snapshot element it came from.
+5. When a replacement cannot use the project's `data-qa` convention because the page
+   exposes no such attribute, say so explicitly and put the replacement in the page
+   object, never inline in the spec.
+6. Write the spec using confirmed locators only, then save the locator report to
+   `reports/locator-confirmation-<feature-slug>.md` as a table of
+   `Scope locator | Result | Replacement | Snapshot element`. Report its path.
+ 
+Never write a locator you did not confirm, and never report a locator as confirmed
+without naming the snapshot element that matched it.
+
 Include: the spec file path, the case IDs implemented, static verification status (typecheck/lint), test execution result (pass/fail), and any deviations from the case table.

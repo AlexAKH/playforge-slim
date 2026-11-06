@@ -53,6 +53,11 @@ Before creating, editing, or deleting any file:
 - **Test coverage inquiries:**
   - Before answering any question about what is tested, covered, or already specified, read `docs/test-index.md` first, then the feature doc that the index names.
 
+- Playwright MCP is adopted per `instructions/adoption/playwright-mcp.md`. Only the
+  Implement step of the create-test pipeline may call browser tools, and a live
+  observation is never evidence for closure — it must be written to an artifact first.
+
+
 ## Capability Registry
 - **Pipelines:**
   - `create-test`: `.ai/pipelines/create-test.md`
