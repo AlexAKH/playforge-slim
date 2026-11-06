@@ -1,0 +1,80 @@
+# Evaluation Cases
+
+These cases check the framework's behavior, including the restraint and preservation expected by Principle 8 of
+[MANIFEST.md](../MANIFEST.md). Reviewing a project's instructions does not require running a benchmark.
+
+They are behavioral, not unit tests. A landscape is good or bad because of what a model does with it, so most
+assertions are judged by a reviewer against a real run. The runner automates only what a machine can decide.
+
+## The cases
+
+| Case | What it protects |
+| --- | --- |
+| `plain-notes-setup` | Restraint. Fails when the framework installs its own shape rather than answering the project. |
+| `bloated-2x-review` | Discrimination. Fails when a review drops durable facts or keeps outgrown scaffolding. |
+| `healthy-minimal-review` | Silence. Fails when a review manufactures work on a landscape that is already correct. |
+
+`healthy-minimal-review` is the case most likely to catch drift toward ceremony, and the one most likely to fail
+quietly. Take a "no findings" result there as a pass, not as a wasted run.
+
+## Running one
+
+```text
+python3 evals/run.py --list
+python3 evals/run.py plain-notes-setup
+```
+
+Staging copies the fixture to a scratch directory, so a run never dirties the committed fixture. Run the named
+workflow there against the case's prompt, in a fresh session with no memory of this repository. Then:
+
+```text
+python3 evals/run.py plain-notes-setup --check /path/to/staged/copy --judgments judgments.json
+```
+
+The runner checks paths and requires one evidence-backed judgment for every behavioral assertion. A missing or malformed
+judgment exits `2`; a failed mechanical or behavioral assertion exits `1`. Judge the run against its transcript and
+diff, not its summary—a run that claims restraint while creating six files fails.
+
+```json
+{
+  "judgments": [
+    {
+      "kind": "must",
+      "assertion": "exact assertion text from the case file",
+      "passed": true,
+      "evidence": "transcript or diff evidence supporting the judgment"
+    }
+  ]
+}
+```
+
+## Optional local evaluation
+
+Run every case locally in separate, non-persistent Claude sessions, with a second fresh session judging the assertions:
+
+```text
+PYTHONDONTWRITEBYTECODE=1 python3 evals/run-live.py --artifacts /path/to/evidence
+```
+
+This runner requires a locally installed and authenticated Claude CLI. It loads the plugin directly from the checkout
+and saves transcripts, diffs, and judgments to the requested directory.
+
+CI runs deterministic framework validation, regression tests, and case staging. It does not install or invoke Claude,
+require `ANTHROPIC_API_KEY`, or gate releases on live model evaluations. Behavioral evaluation remains available locally.
+
+## The native harness
+
+Claude Code ships `claude plugin eval`, which runs `evals/**/case.yaml` cases with LLM graders. Principle 5 prefers a
+tool's native mechanism over a local imitation once its behavior is verified.
+
+It remains early access and is not enabled on the account maintaining this suite, so its authoring schema and execution
+cannot yet be verified end to end. The interim runner uses `cases/*.yml`, not `case.yaml`, so the layouts do not collide
+and cases can migrate one at a time. Recheck `claude plugin eval init --help` before extending this harness.
+
+## Adding a case
+
+Add a fixture directory under `fixtures/` and a case file under `cases/`. A case names its fixture, workflow, and
+prompt, states in `rationale` what regression it protects against, and lists assertions as `must` and `must_not`.
+Use `paths_absent` and `paths_present` for the assertions a machine can settle.
+
+Write cases that can fail. An assertion every plausible run satisfies protects nothing.

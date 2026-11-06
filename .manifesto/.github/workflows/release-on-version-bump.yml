@@ -1,0 +1,136 @@
+name: Release on version bump
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - README.md
+      - plugins/**
+      - .claude-plugin/**
+      - .agents/**
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Read current and released versions
+        id: versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          current_version=$(awk '/^version:/ {print $2}' plugins/agent-manifesto/MANIFEST.md)
+          latest_tag=$(git tag --list 'v*' --sort=-v:refname | head -n1 || true)
+          released_version=""
+
+          if [ -n "$latest_tag" ]; then
+            if git show "$latest_tag":plugins/agent-manifesto/MANIFEST.md > /tmp/released_manifest.md 2>/dev/null || \
+               git show "$latest_tag":MANIFEST.md > /tmp/released_manifest.md 2>/dev/null; then
+              released_version=$(awk '/^version:/ {print $2}' /tmp/released_manifest.md)
+            fi
+          fi
+
+          echo "current_version=$current_version" >> "$GITHUB_OUTPUT"
+          echo "released_version=$released_version" >> "$GITHUB_OUTPUT"
+
+      - name: Decide whether to release
+        id: decide
+        shell: bash
+        run: |
+          set -euo pipefail
+          current="${{ steps.versions.outputs.current_version }}"
+          released="${{ steps.versions.outputs.released_version }}"
+
+          if [ -z "$current" ]; then
+            echo "release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # First release if no released manifest exists
+          if [ -z "$released" ]; then
+            echo "release=true" >> "$GITHUB_OUTPUT"
+            echo "tag=v$current" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          release=false
+          if [ "$current" != "$released" ] && [ "$(printf '%s\n%s\n' "$released" "$current" | sort -V | tail -n1)" = "$current" ]; then
+            release=true
+          fi
+
+          echo "release=$release" >> "$GITHUB_OUTPUT"
+          echo "tag=v$current" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare curated release assets
+        if: steps.decide.outputs.release == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release-artifacts
+          prefix="agent-manifesto-${{ steps.versions.outputs.current_version }}/"
+          archive_base="release-artifacts/agent-manifesto-${{ steps.versions.outputs.current_version }}"
+
+          archive_paths=(
+            README.md
+            plugins
+            .claude-plugin
+            .agents
+          )
+
+          for path in "${archive_paths[@]}"; do
+            git ls-tree -d --name-only HEAD "$path" > /dev/null 2>&1 || \
+            git ls-files --error-unmatch "$path" > /dev/null 2>&1 || \
+            { echo "ERROR: '$path' not found in HEAD" >&2; exit 1; }
+          done
+
+          git archive --format=tar.gz --prefix="$prefix" --output="${archive_base}.tar.gz" HEAD "${archive_paths[@]}"
+          git archive --format=zip    --prefix="$prefix" --output="${archive_base}.zip"    HEAD "${archive_paths[@]}"
+
+      - name: Build release notes from commit log
+        if: steps.decide.outputs.release == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          prev_tag=$(git tag --list 'v*' --sort=-v:refname | head -n1 || true)
+          if [ -n "$prev_tag" ]; then
+            range="${prev_tag}..HEAD"
+            header="## Changes since ${prev_tag}"
+          else
+            range="HEAD"
+            header="## Changes"
+          fi
+          {
+            echo "$header"
+            echo
+            git log --no-merges --pretty=format:'- %s (%h)' "$range"
+            echo
+          } > release-notes.md
+
+      - name: Create Git tag
+        if: steps.decide.outputs.release == 'true'
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag "${{ steps.decide.outputs.tag }}"
+          git push origin "${{ steps.decide.outputs.tag }}"
+
+      - name: Create GitHub release
+        if: steps.decide.outputs.release == 'true'
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.decide.outputs.tag }}
+          body_path: release-notes.md
+          files: |
+            release-artifacts/agent-manifesto-${{ steps.versions.outputs.current_version }}.tar.gz
+            release-artifacts/agent-manifesto-${{ steps.versions.outputs.current_version }}.zip
