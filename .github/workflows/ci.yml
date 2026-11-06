@@ -24,6 +24,8 @@ jobs:
       # reachable app, this line becomes:
       #   npx playwright install --with-deps && npx playwright test
       - run: npx playwright test --list
+        env:
+          BASE_URL: https://automationexercise.com
 
   review:
     # Gate every entry point to the owner. On a public repo this stops anyone
@@ -34,7 +36,7 @@ jobs:
       - name: OpenCode review
         uses: sst/opencode/github@latest
         with:
-          model: opencode-go/deepseek-v4.1-flash
+          model: opencode-go/gpt-4o-mini
           use_github_token: true
           prompt: |
             Review this pull request's changed test files. Read each changed
