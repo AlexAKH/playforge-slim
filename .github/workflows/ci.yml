@@ -36,7 +36,7 @@ jobs:
       - name: OpenCode review
         uses: sst/opencode/github@latest
         with:
-          model: opencode-go/gpt-4o-mini
+          model: opencode-go/gpt-5.6-luna
           use_github_token: true
           prompt: |
             Review this pull request's changed test files. Read each changed
