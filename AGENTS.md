@@ -45,6 +45,10 @@ Before creating, editing, or deleting any file:
   - Before creating or updating a page object, read `docs/conventions/page-objects.md`.
   - Before creating or updating a component, read `docs/conventions/components.md`.
 
+  - When a file under `test-cases/` is created or changed and the change was not made by the craft-test-cases pipeline in this session, follow the update-project-docs pipeline at `instructions/pipelines/update-project-docs.md` before reporting the task done.
+  - When a spec file under `tests/` is created or changed, follow the update-project-docs pipeline at `instructions/pipelines/update-project-docs.md` for the feature whose test-case file the changed spec implements, before reporting the task done. Skip this when the changed spec implements no crafted test-case file.
+  - Before answering any question about what is tested, covered, or already specified, read `docs/test-index.md` first, then the feature doc that the index names.
+
 ## Capability Registry
 - **Pipelines:**
   - `create-test`: `.ai/pipelines/create-test.md`
