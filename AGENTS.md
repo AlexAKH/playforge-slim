@@ -57,6 +57,11 @@ Before creating, editing, or deleting any file:
   Implement step of the create-test pipeline may call browser tools, and a live
   observation is never evidence for closure — it must be written to an artifact first.
 
+  - The `test-judge` agent at `instructions/agents/test-judge.md` is the only reviewer of a spec
+  produced by the create-test pipeline. It scores against `instructions/rubrics/test-quality.md`,
+  the pipeline's Review step is its caller inside the pipeline, and the run may not close on
+  any other verdict.
+
 
 ## Capability Registry
 - **Pipelines:**
