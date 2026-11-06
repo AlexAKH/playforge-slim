@@ -1,3 +1,13 @@
+---
+name: task-complete
+description: Mandatory final gate verifying requirement coverage, case coverage, review findings, and artifact existence before closing a task.
+---
+
+---
+name: task-complete
+description: Mandatory final gate verifying requirement coverage, case coverage, review findings, and artifact existence before closing a task.
+---
+
 # Task Complete
  
 ## Purpose

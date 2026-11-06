@@ -31,12 +31,18 @@ Before creating, editing, or deleting any file:
 ## Capability Routing
 - **Create a test:**
   - Follow the create-test pipeline at `.ai/pipelines/create-test.md`, starting from step 1.
+- **Craft test cases:**
+  - Follow the craft-test-cases pipeline at `.ai/pipelines/craft-test-cases.md`.
 - **Modify an existing test:**
   1. Follow the `clarify-test-scope` skill at `.ai/skills/clarify-test-scope/SKILL.md` before reading or editing code.
   2. Implement test code adhering to `docs/conventions/page-objects.md`, `docs/conventions/components.md`, and `docs/conventions/test-standards.md`.
   3. Run the test with `npx playwright test <spec-path>` and observe results.
   4. Trigger `.ai/agents/test-reviewer.md` in an isolated context and report its verdict before declaring completion.
   5. Conclude with `.ai/skills/task-complete/SKILL.md`.
+- **Update project documentation:**
+  - Follow the update-project-docs pipeline at `.ai/pipelines/update-project-docs.md`.
+  - Trigger when a file under `test-cases/` is created or changed outside the craft-test-cases pipeline.
+  - Trigger when a spec file under `tests/` is created or changed, for the feature whose test-case file the changed spec implements.
 - **Add or evaluate instruction capabilities:**
   1. Classify the capability using `.ai/conventions/skill-vs-agent.md`.
   2. Before accepting new or updated instruction artifacts, evaluate them using `.ai/agents/instruction-evaluator.md`.
@@ -44,23 +50,24 @@ Before creating, editing, or deleting any file:
 - **Page objects and components:**
   - Before creating or updating a page object, read `docs/conventions/page-objects.md`.
   - Before creating or updating a component, read `docs/conventions/components.md`.
-
-  - When a file under `test-cases/` is created or changed and the change was not made by the craft-test-cases pipeline in this session, follow the update-project-docs pipeline at `instructions/pipelines/update-project-docs.md` before reporting the task done.
-  - When a spec file under `tests/` is created or changed, follow the update-project-docs pipeline at `instructions/pipelines/update-project-docs.md` for the feature whose test-case file the changed spec implements, before reporting the task done. Skip this when the changed spec implements no crafted test-case file.
+- **Test coverage inquiries:**
   - Before answering any question about what is tested, covered, or already specified, read `docs/test-index.md` first, then the feature doc that the index names.
-
-
-  - Never report a task as done, complete, or finished until `instructions/skills/task-complete.md` has returned the line `Status: closed` in this run. A run that ends without that line is unfinished, whatever its other steps reported.
-  - When task-complete returns `Status: refused`, hand the run back to the step it names, apply only the correction it states, and run the gate again. Do not report the refusal to the user as progress toward completion.
 
 ## Capability Registry
 - **Pipelines:**
   - `create-test`: `.ai/pipelines/create-test.md`
+  - `craft-test-cases`: `.ai/pipelines/craft-test-cases.md`
+  - `update-project-docs`: `.ai/pipelines/update-project-docs.md`
 - **Skills:**
   - `clarify-test-scope`: `.ai/skills/clarify-test-scope/SKILL.md`
-  - `craft-test-cases`: `.ai/skills/craft-test-cases/SKILL.md`
   - `implement-test`: `.ai/skills/implement-test/SKILL.md`
   - `task-complete`: `.ai/skills/task-complete/SKILL.md`
+  - `parse-requirement`: `.ai/skills/parse-requirement/SKILL.md`
+  - `apply-test-techniques`: `.ai/skills/apply-test-techniques/SKILL.md`
+  - `produce-test-cases`: `.ai/skills/produce-test-cases/SKILL.md`
+  - `update-domain-knowledge`: `.ai/skills/update-domain-knowledge/SKILL.md`
+  - `write-feature-doc`: `.ai/skills/write-feature-doc/SKILL.md`
+  - `update-test-index`: `.ai/skills/update-test-index/SKILL.md`
 - **Agents:**
   - `test-reviewer`: `.ai/agents/test-reviewer.md`
   - `instruction-evaluator`: `.ai/agents/instruction-evaluator.md`
