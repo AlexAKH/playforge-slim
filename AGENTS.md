@@ -53,14 +53,18 @@ Before creating, editing, or deleting any file:
 - **Test coverage inquiries:**
   - Before answering any question about what is tested, covered, or already specified, read `docs/test-index.md` first, then the feature doc that the index names.
 
-- Playwright MCP is adopted per `instructions/adoption/playwright-mcp.md`. Only the
-  Implement step of the create-test pipeline may call browser tools, and a live
-  observation is never evidence for closure — it must be written to an artifact first.
+- Playwright MCP is adopted per `instructions/adoption/playwright-mcp.md`. Browser tools
+  may be called by the create-test pipeline's Implement step, and read-only by the
+  diagnose-failure pipeline's Investigate step. A live observation is never evidence for
+  closure — it must be written to an artifact first.
 
-  - The `test-judge` agent at `instructions/agents/test-judge.md` is the only reviewer of a spec
+- The `test-judge` agent at `instructions/agents/test-judge.md` is the only reviewer of a spec
   produced by the create-test pipeline. It scores against `instructions/rubrics/test-quality.md`,
   the pipeline's Review step is its caller inside the pipeline, and the run may not close on
   any other verdict.
+
+- When the user reports a failing test, or asks why a test is failing, run the pipeline at
+  `instructions/pipelines/diagnose-failure.md` before changing any test or page object.
 
 
 ## Capability Registry

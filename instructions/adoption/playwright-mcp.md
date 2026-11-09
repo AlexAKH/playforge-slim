@@ -20,7 +20,11 @@
  
 ## Scope limits
 - Runs with `--isolated`, so no run inherits or leaves browser state.
-- Bound to the Implement step only; no other step may call browser tools.
+- Bound to the create-test pipeline's Implement step and, read-only, to the
+  diagnose-failure pipeline's Investigate step. No other step may call browser tools.
+- The diagnose-failure grant covers navigate, snapshot, and evaluating a selector for a
+  match count. It may not type, click, or submit, and a live observation must be written
+  into `reports/diagnosis-<slug>.md` before any step cites it.
 - A live observation is never evidence for closure. What the browser showed must be
   written into a produced artifact before any step may cite it.
  
